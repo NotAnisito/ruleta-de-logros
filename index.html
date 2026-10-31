@@ -11,10 +11,10 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:title" content="Ruleta de logros de Hearts of Iron IV">
 <meta property="og:description" content="Gira la ruleta, consigue el logro y gana una medalla por cada DLC completado.">
-<meta property="og:image" content="https://notanisito.github.io/ruleta-de-logros/og-image.jpg">
+<meta property="og:image" content="https://TU-USUARIO.github.io/ruleta-de-logros/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://notanisito.github.io/ruleta-de-logros/">
+<meta property="og:url" content="https://TU-USUARIO.github.io/ruleta-de-logros/">
 <meta name="twitter:card" content="summary_large_image">
 <style>
 @font-face{font-family:"Big Shoulders Stencil Display"; font-style:normal; font-weight:700; font-display:swap; src:url("fonts/big-shoulders-stencil-700.woff") format("woff")}
@@ -80,7 +80,7 @@ button,input,select{font:inherit;color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* Placa de latón */
-.desk-top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 20px; padding:20px clamp(16px,4vw,44px) 4px; max-width:1360px; margin:0 auto}
+.desk-top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 20px; padding:20px clamp(16px,4vw,44px) 4px; max-width:1640px; margin:0 auto}
 .plate{
   position:relative; z-index:6; display:inline-block; padding:9px 26px 8px;
   background:linear-gradient(180deg,#e2c77d,#b7963f 55%,#9c7c2e); color:#2a2010;
@@ -108,7 +108,7 @@ button,input,select{font:inherit;color:inherit}
 .lang button[aria-selected="true"]{background:var(--olive); color:var(--on-desk)}
 
 /* Mesa */
-.desk{display:grid; grid-template-columns:minmax(0,1.12fr) minmax(330px,.88fr); gap:34px; padding:18px clamp(16px,4vw,44px) 48px; max-width:1360px; margin:0 auto; align-items:start}
+.desk{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr); gap:clamp(34px,calc(8vw - 60px),110px); padding:18px clamp(16px,4vw,44px) 48px; max-width:1640px; margin:0 auto; align-items:start}
 @media (max-width:920px){ .desk{grid-template-columns:minmax(0,1fr)} }
 
 .theatre{display:flex; flex-direction:column; align-items:center; gap:16px; min-width:0}
@@ -122,7 +122,7 @@ button,input,select{font:inherit;color:inherit}
 .rounds{position:absolute; z-index:1; right:7%; bottom:-154px; width:min(250px,40%); pointer-events:none; filter:drop-shadow(3px 5px 3px var(--shadow)) drop-shadow(0 1px 1px rgba(0,0,0,.35))}
 @media (max-width:560px){ .rounds{right:-10%; width:46%; bottom:-150px} }
 /* Vitrina de condecoraciones */
-.medals{max-width:1360px; margin:0 auto; padding:10px clamp(16px,4vw,44px) 64px}
+.medals{max-width:1640px; margin:0 auto; padding:10px clamp(16px,4vw,44px) 64px}
 .medal-board{
   position:relative; padding:20px 22px 24px; border-radius:4px; color:#e6dcc0;
   background-color:var(--felt);
@@ -149,7 +149,7 @@ button,input,select{font:inherit;color:inherit}
 @media (prefers-reduced-motion: reduce){ .toast{transition:none} }
 .foot-btns{display:flex; flex-wrap:wrap; gap:8px}
 .foot-btns .btn{font-size:12.5px; padding:5px 9px}
-.site-foot{max-width:1360px; margin:-28px auto 0; padding:0 clamp(16px,4vw,44px) 40px; color:var(--on-desk-2); font-size:12px; line-height:1.5; text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.site-foot{max-width:1640px; margin:-28px auto 0; padding:0 clamp(16px,4vw,44px) 40px; color:var(--on-desk-2); font-size:12px; line-height:1.5; text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .site-foot p{margin:4px 0; max-width:90ch}
 .modal{position:fixed; inset:0; z-index:50; display:grid; place-items:center; padding:20px; background:rgba(10,6,2,.62)}
 .modal[hidden]{display:none}
@@ -235,6 +235,7 @@ button,input,select{font:inherit;color:inherit}
 
 /* Cuaderno */
 .notebook{
+  justify-self:end; width:100%; max-width:600px;
   position:relative; z-index:2; padding:28px 13px 13px; border-radius:7px; transform:rotate(1.1deg);
   background:var(--leather);
   background-image:radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.4px), linear-gradient(160deg, rgba(255,255,255,.06), transparent 40%, rgba(0,0,0,.2));
@@ -1940,6 +1941,37 @@ function strand(segs, id){
   });
   return s;
 }
+/* Spline Catmull-Rom centrípeta: curva suave que pasa por todos los puntos, sin quiebros */
+function spline(pts, n){
+  const out = [];
+  const P = [pts[0], ...pts, pts[pts.length-1]];
+  for(let i=1;i<P.length-2;i++){
+    const p0=P[i-1], p1=P[i], p2=P[i+1], p3=P[i+2];
+    const d = (a,b)=> Math.pow(Math.hypot(b.x-a.x,b.y-a.y), .5) || 1e-4;
+    const t0=0, t1=t0+d(p0,p1), t2=t1+d(p1,p2), t3=t2+d(p2,p3);
+    for(let k=0;k<n;k++){
+      const t = t1 + (t2-t1)*k/n;
+      const L = (a,b,ta,tb)=>({x:(tb-t)/(tb-ta)*a.x+(t-ta)/(tb-ta)*b.x, y:(tb-t)/(tb-ta)*a.y+(t-ta)/(tb-ta)*b.y});
+      const A1=L(p0,p1,t0,t1), A2=L(p1,p2,t1,t2), A3=L(p2,p3,t2,t3);
+      const B1=L(A1,A2,t0,t2), B2=L(A2,A3,t1,t3);
+      out.push(L(B1,B2,t1,t2));
+    }
+  }
+  out.push(pts[pts.length-1]);
+  return out;
+}
+function beadsAlong(pts, step){
+  const res = [pts[0]]; let acc = 0;
+  for(let i=1;i<pts.length;i++){
+    let a = pts[i-1], b = pts[i], seg = Math.hypot(b.x-a.x,b.y-a.y);
+    while(acc + seg >= step){
+      const t = (step-acc)/seg; const p = {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t};
+      res.push(p); a = p; seg = Math.hypot(b.x-a.x,b.y-a.y); acc = 0;
+    }
+    acc += seg;
+  }
+  return res;
+}
 let chainRaf = 0;
 function drawChain(){
   cancelAnimationFrame(chainRaf);
@@ -1953,21 +1985,19 @@ function drawChain(){
     const H = {x:hr.left + sx, y:hr.top + sy};
     const W = document.documentElement.scrollWidth, Ht = document.documentElement.scrollHeight;
     layers.forEach(s=>{ s.setAttribute("width",W); s.setAttribute("height",Ht); s.style.width = W+"px"; s.style.height = Ht+"px"; });
-    // Cadena suelta: pasa por el agujero de la chapa, cae con holgura y sale de escena por la esquina superior izquierda,
-    // por debajo de la placa del título
+    // Cadena suelta: pasa por el agujero de la chapa y sus dos tramos se curvan con holgura
+    // hacia la esquina superior izquierda, por debajo de la placa del título.
     const L = pr.left + sx, Bt = pr.bottom + sy;
     const P = (x,y)=>({x,y});
-    const hA = P(H.x-2.5, H.y+1), hB = P(H.x+2.5, H.y-1);
-    const exA = P(-40, 70), exB = P(30, -40);
-    // Tramo trasero (por detrás de la chapa): primero se descuelga hacia abajo y luego sube en curva
-    const fromTag = beads3(hA, P(hA.x-95, hA.y+70), P(L+70, Bt+150), P((L+exA.x)/2+10, Bt+30), 7)
-      .concat(beads3(P((L+exA.x)/2+10, Bt+30), P(L-30, Bt+5), P(10, 120), exA, 7).slice(1));
-    // Tramo delantero: sale del agujero hacia arriba por el margen izquierdo de la chapa (sin tapar sus textos) y se pierde bajo la placa
-    const toTag = beads3(hB, P(hB.x-6, hB.y-60), P(L+95, Bt+18), P(L+55, Bt-6), 7)
-      .concat(beads3(P(L+55, Bt-6), P(L+25, Bt-40), P(50, 20), exB, 7).slice(1));
+    const hA = P(H.x-2, H.y+2), hB = P(H.x+2, H.y-2);
+    // Tramo trasero: se descuelga por detrás de la chapa, da un lazo suelto a la izquierda y vuelve bajo la placa
+    const back = spline([hA, P(H.x-4,H.y+22), P(H.x-26,H.y+42), P(H.x-62,H.y+44), P(H.x-92,H.y+20),
+                         P(H.x-104,H.y-18), P(H.x-92,(H.y+Bt)/2-6), P(H.x-56,Bt+6), P(H.x-22,Bt-16), P(H.x-8,Bt-46)], 40);
+    // Tramo delantero: sube desde el agujero por la esquina de la chapa y se mete bajo la placa
+    const front = spline([hB, P(H.x-7,H.y-22), P(H.x-15,H.y-46), P(H.x-14,(H.y+Bt)/2), P(H.x-2,Bt+6), P(H.x+14,Bt-20), P(H.x+24,Bt-46)], 40);
     layers[0].innerHTML = "";
-    chainBack.innerHTML = strand([fromTag], "bgB");
-    chainFront.innerHTML = strand([toTag], "bgF");
+    chainBack.innerHTML = strand([beadsAlong(back,7)], "bgB");
+    chainFront.innerHTML = strand([beadsAlong(front,7)], "bgF");
   });
 }
 window.addEventListener("resize", drawChain);
