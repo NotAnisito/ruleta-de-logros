@@ -110,7 +110,6 @@ button,input,select{font:inherit;color:inherit}
 /* Mesa */
 .desk{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr); gap:clamp(34px,calc(8vw - 60px),110px); padding:18px clamp(16px,4vw,44px) 48px; max-width:1640px; margin:0 auto; align-items:start}
 @media (max-width:920px){ .desk{grid-template-columns:minmax(0,1fr)} }
-@media (min-width:921px){ .desk{padding-bottom:190px} }
 
 .theatre{display:flex; flex-direction:column; align-items:center; gap:16px; min-width:0}
 .field{position:relative; width:100%; display:grid; place-items:center; padding:clamp(56px,8vw,84px) 4% clamp(34px,5vw,52px)}
@@ -118,7 +117,7 @@ button,input,select{font:inherit;color:inherit}
 
 .theatre{position:relative}
 .knife{position:absolute; z-index:1; left:-27%; top:22%; width:min(580px,88%); transform:rotate(74deg); transform-origin:30% 50%; pointer-events:none; filter:drop-shadow(5px 9px 6px var(--shadow)) drop-shadow(1px 2px 1px rgba(0,0,0,.35))}
-.pistol{position:absolute; z-index:1; right:-30%; bottom:-300px; width:min(500px,80%); transform:rotate(56deg) scaleX(-1); pointer-events:none; filter:drop-shadow(-8px 13px 9px var(--shadow)) drop-shadow(-1px 2px 1px rgba(0,0,0,.4))}
+.pistol{position:absolute; z-index:1; right:-36%; bottom:-144px; width:min(500px,80%); transform:rotate(56deg) scaleX(-1); pointer-events:none; filter:drop-shadow(-8px 13px 9px var(--shadow)) drop-shadow(-1px 2px 1px rgba(0,0,0,.4))}
 @media (max-width:560px){ .knife{left:-32%; width:96%} .pistol{right:-42%; width:92%; bottom:-128px} }
 .rounds{position:absolute; z-index:1; right:7%; bottom:-154px; width:min(250px,40%); pointer-events:none; filter:drop-shadow(3px 5px 3px var(--shadow)) drop-shadow(0 1px 1px rgba(0,0,0,.35))}
 @media (max-width:560px){ .rounds{right:-10%; width:46%; bottom:-150px} }
@@ -1991,11 +1990,12 @@ function drawChain(){
     const L = pr.left + sx, Bt = pr.bottom + sy;
     const P = (x,y)=>({x,y});
     const hA = P(H.x-2, H.y+2), hB = P(H.x+2, H.y-2);
-    // Tramo trasero: se descuelga por detrás de la chapa, da un lazo suelto a la izquierda y vuelve bajo la placa
-    const back = spline([hA, P(H.x-4,H.y+22), P(H.x-26,H.y+42), P(H.x-62,H.y+44), P(H.x-92,H.y+20),
-                         P(H.x-104,H.y-18), P(H.x-92,(H.y+Bt)/2-6), P(H.x-56,Bt+6), P(H.x-22,Bt-16), P(H.x-10,(Bt+pr.top+sy)/2), P(H.x-4,-40)], 40);
-    // Tramo delantero: sube desde el agujero por la esquina de la chapa y se mete bajo la placa
-    const front = spline([hB, P(H.x-7,H.y-22), P(H.x-15,H.y-46), P(H.x-14,(H.y+Bt)/2), P(H.x-2,Bt+6), P(H.x+14,Bt-20), P(H.x+20,(Bt+pr.top+sy)/2), P(H.x+26,-40)], 40);
+    // Cada tramo es una sola curva cúbica: cambia de dirección de forma continua, sin codos.
+    const cubic = (p0,c1,c2,p1)=>{ const o=[]; for(let i=0;i<=240;i++) o.push(bez3(p0,c1,c2,p1,i/240)); return o; };
+    // Tramo trasero: baja por detrás de la chapa, hace un vientre amplio a la izquierda y sube hasta salir por arriba
+    const back = cubic(hA, P(H.x-14,H.y+100), P(L-112,H.y+78), P(L-104,-40));
+    // Tramo delantero: sube desde el agujero, pasa bajo el extremo izquierdo de la placa y sale por arriba, separado del otro
+    const front = cubic(hB, P(H.x-22,H.y-50), P(H.x+20,Bt+34), P(H.x+46,-40));
     layers[0].innerHTML = "";
     chainBack.innerHTML = strand([beadsAlong(back,7)], "bgB");
     chainFront.innerHTML = strand([beadsAlong(front,7)], "bgF");
