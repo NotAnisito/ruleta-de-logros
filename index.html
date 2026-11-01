@@ -309,8 +309,7 @@ details.dlcs[open] summary::before{content:"–"}
 @keyframes tick{from{transform:rotate(40deg) scale(0); opacity:0} to{transform:rotate(40deg) scale(1); opacity:1}}
 @media (prefers-reduced-motion: reduce){ #list li.strike-anim, #list li.strike-anim .tt, #list li.strike-anim .chk:checked::after{animation:none} }
 .empty{padding:22px 18px 22px 62px; font-family:var(--f-hand); font-size:21px; color:var(--ink-2)}
-.page-foot{padding:10px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; border-top:2px solid var(--rule)}
-.page-foot p{margin:0; font-size:11.5px; color:var(--ink-2); max-width:42ch}
+.page-foot{padding:10px 16px; display:flex; justify-content:flex-start; align-items:center; gap:12px; flex-wrap:wrap; border-top:2px solid var(--rule)}
 .btn.danger{color:var(--red); border-color:var(--red); font-size:12.5px; padding:5px 9px}
 .btn.danger.armed{background:var(--red); color:var(--paper)}
 
@@ -792,7 +791,6 @@ details.dlcs[open] summary::before{content:"–"}
       <div class="count" id="count"></div>
       <ul id="list"></ul>
       <div class="page-foot">
-        <p data-i18n="note"></p>
         <div class="foot-btns">
           <button class="btn" id="exportBtn" type="button" data-i18n="export"></button>
           <button class="btn" id="importBtn" type="button" data-i18n="import"></button>
@@ -814,8 +812,9 @@ details.dlcs[open] summary::before{content:"–"}
   </div>
 </section>
 <footer class="site-foot">
-  <p data-i18n="privacy"></p>
-  <p data-i18n="credits"></p>
+  <p data-i18n="foot1"></p>
+  <p data-i18n="foot2"></p>
+  <p data-i18n="foot3"></p>
 </footer>
 <div class="modal" id="codeModal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
@@ -1212,15 +1211,15 @@ const T = {
     reset:"Reiniciar progreso", resetArm:"Pulsa otra vez para borrarlo todo",
     sndOn:"Sonido activado (pulsa para silenciar)", sndOff:"Sonido desactivado (pulsa para activarlo)",
     medals:"Condecoraciones", medalCount:(n,t)=>`${n} de ${t} medallas`, toast:(m,d)=>`Medalla obtenida: ${m} — ${d}`,
-    note:"Los 293 logros de Steam, revisados en octubre de 2026 (versión 1.19.4). Página creada por un fan, sin afiliación con Paradox Interactive.",
     export:"Exportar progreso", import:"Importar progreso",
     exTitle:"Tu código de progreso", exHelp:"Guárdalo en un lugar seguro. Pégalo en «Importar progreso» en otro navegador o dispositivo para recuperar tus logros y tu selección de DLC.",
     imTitle:"Importar progreso", imHelp:"Pega tu código de progreso. Sustituirá el progreso guardado en este navegador.",
     copy:"Copiar", copied:"Copiado en el portapapeles.", copyFail:"No se pudo copiar solo: el código ya está seleccionado, cópialo a mano.",
     load:"Cargar", close:"Cerrar", badCode:"El código no es válido. Comprueba que esté completo.",
     loaded:n=> n===1 ? "Progreso cargado: 1 logro completado." : `Progreso cargado: ${n} logros completados.`,
-    privacy:"Privacidad: esta página no usa cookies, analítica ni servicios de terceros. Tu progreso se guarda solo en este navegador. Como cualquier web, el servidor que la aloja recibe la IP de quien la visita.",
-    credits:"Tipografías incluidas en la propia página: Big Shoulders Stencil y Caveat (SIL Open Font License 1.1) y Special Elite (Apache License 2.0). Hearts of Iron IV y los nombres de sus logros pertenecen a Paradox Interactive.",
+    foot1:"Página no oficial creada por un fan, gratuita y sin publicidad. No está afiliada, patrocinada ni respaldada por Paradox Interactive AB ni por Valve Corporation. Hearts of Iron IV, sus logros, nombres e imágenes pertenecen a sus titulares.",
+    foot2:"Lista de 293 logros revisada con la versión 1.19.4 del juego (parche del 27 de octubre de 2026, con Thunder at Our Gates). Los logros de parches o DLC posteriores pueden no estar incluidos.",
+    foot3:"Sin cookies, sin analítica y sin servicios de terceros. Tu progreso y tus ajustes se guardan solo en tu navegador. El alojamiento (GitHub Pages) registra la IP de los visitantes por seguridad.",
     card:["N","E","S","O"], dec:","
   },
   en:{
@@ -1246,15 +1245,15 @@ const T = {
     reset:"Reset progress", resetArm:"Press again to erase everything",
     sndOn:"Sound on (press to mute)", sndOff:"Sound off (press to turn on)",
     medals:"Decorations", medalCount:(n,t)=>`${n} of ${t} medals`, toast:(m,d)=>`Medal awarded: ${m} — ${d}`,
-    note:"All 293 Steam achievements, checked in October 2026 (patch 1.19.4). Fan-made page, not affiliated with Paradox Interactive.",
     export:"Export progress", import:"Import progress",
     exTitle:"Your progress code", exHelp:"Keep it somewhere safe. Paste it into “Import progress” on another browser or device to restore your achievements and DLC selection.",
     imTitle:"Import progress", imHelp:"Paste your progress code. It will replace the progress saved in this browser.",
     copy:"Copy", copied:"Copied to the clipboard.", copyFail:"Couldn’t copy automatically: the code is selected, copy it by hand.",
     load:"Load", close:"Close", badCode:"That code isn’t valid. Check that it’s complete.",
     loaded:n=> n===1 ? "Progress loaded: 1 achievement completed." : `Progress loaded: ${n} achievements completed.`,
-    privacy:"Privacy: this page uses no cookies, analytics or third-party services. Your progress is stored only in this browser. Like any website, the server hosting it receives visitors’ IP addresses.",
-    credits:"Fonts bundled with the page: Big Shoulders Stencil and Caveat (SIL Open Font License 1.1) and Special Elite (Apache License 2.0). Hearts of Iron IV and its achievement names belong to Paradox Interactive.",
+    foot1:"Unofficial fan-made page, free and ad-free. It is not affiliated with, sponsored by or endorsed by Paradox Interactive AB or Valve Corporation. Hearts of Iron IV, its achievements, names and images belong to their respective owners.",
+    foot2:"List of 293 achievements checked against game version 1.19.4 (patch of 27 October 2026, with Thunder at Our Gates). Achievements from later patches or DLC may not be included.",
+    foot3:"No cookies, no analytics and no third-party services. Your progress and settings are stored only in your browser. The hosting (GitHub Pages) logs visitors’ IP addresses for security.",
     card:["N","E","S","W"], dec:"."
   }
 };
