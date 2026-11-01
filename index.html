@@ -132,10 +132,9 @@ button,input,select{font:inherit;color:inherit}
   background-size:4px 4px, 7px 7px, 100% 100%;
   box-shadow:0 0 0 12px var(--frame), 0 0 0 13px rgba(0,0,0,.45), inset 0 0 34px rgba(0,0,0,.55), 0 20px 34px 12px var(--shadow);
 }
-@media (min-width:921px){
-  .medals,.site-foot{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr); column-gap:clamp(34px,calc(8vw - 60px),110px)}
-  .medal-board,.site-foot>*{grid-column:1}
-}
+/* Medallero centrado y casi cuadrado; el pie, alineado con él */
+.medal-board{max-width:860px; margin:0 auto}
+body .site-foot{max-width:calc(860px + 2 * clamp(16px,4vw,44px))}
 @media (min-width:1200px) and (max-width:1500px){ .medal-board .slots{grid-template-columns:repeat(6,minmax(0,1fr)); gap:18px 8px} }
 @media (max-width:920px){ .medal-board{max-width:760px; margin:0 auto} }
 .medal-head{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 20px}
@@ -251,10 +250,6 @@ button,input,select{font:inherit;color:inherit}
   box-shadow:0 18px 34px var(--shadow), inset 0 0 0 1px rgba(0,0,0,.4);
 }
 .nb-col{display:flex; justify-content:flex-end; min-width:0; min-height:1px}
-@media (min-width:921px){
-  /* Libreta fija: ocupa la columna derecha, arranca alineada con la mesa y, tras subir hasta 18 px del borde, no se mueve más */
-  .notebook{position:fixed; z-index:4; max-width:none; top:max(calc(env(safe-area-inset-top,0px) + 18px), var(--nb-top,107px)); left:var(--nb-left,auto); width:var(--nb-w,600px)}
-}
 .spiral{position:absolute; left:20px; right:20px; top:-12px; height:56px; z-index:2; pointer-events:none}
 .spiral svg{display:block; width:100%; height:100%; overflow:visible}
 .page{

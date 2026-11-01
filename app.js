@@ -1048,25 +1048,6 @@ document.addEventListener("keydown", e=>{
     if(e.shiftKey && i<=0){ e.preventDefault(); f[f.length-1].focus(); } else if(!e.shiftKey && i===f.length-1){ e.preventDefault(); f[0].focus(); } }
 });
 
-/* ---------- Libreta fija ---------- */
-const nbCol = $(".nb-col"), nbEl = $(".notebook");
-let nbRaf = 0;
-function placeNb(){
-  nbRaf = 0;
-  if(window.innerWidth <= 920){ ["--nb-left","--nb-w","--nb-top"].forEach(v=> nbEl.style.removeProperty(v)); return; }
-  const r = nbCol.getBoundingClientRect(), w = Math.min(r.width, 600);
-  nbEl.style.setProperty("--nb-w", w + "px");
-  nbEl.style.setProperty("--nb-left", (r.right - w) + "px");
-  nbEl.style.setProperty("--nb-top", r.top + "px");
-}
-function queueNb(){ if(!nbRaf) nbRaf = requestAnimationFrame(placeNb); }
-window.addEventListener("scroll", placeNb, {passive:true});
-window.addEventListener("resize", queueNb);
-window.addEventListener("load", placeNb);
-if(window.ResizeObserver) new ResizeObserver(queueNb).observe(document.body);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(placeNb);
-placeNb();
-
 let armTimer = null;
 $("#reset").addEventListener("click", e=>{
   const b = e.currentTarget;
